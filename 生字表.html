@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>和心日語 - 生字表｜問候語 + 數字 1-10</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Noto Sans TC', system-ui, -apple-system, sans-serif;
+      background: #ffffff;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+    :root {
+      --primary-red: #e60012;
+      --dark-red: #c8102e;
+      --gray: #444;
+      --light-gray: #777;
+    }
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 1.2rem 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .logo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--primary-red);
+      text-decoration: none;
+    }
+    .back-btn {
+      color: var(--gray);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+    .voice-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+    }
+    main {
+      padding: 3rem 6% 6rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 2.8rem;
+      color: var(--primary-red);
+      text-align: center;
+      margin-bottom: 0.8rem;
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--light-gray);
+      font-size: 1.3rem;
+      margin-bottom: 3rem;
+    }
+    .section-title {
+      font-size: 2.1rem;
+      color: var(--dark-red);
+      margin: 3rem 0 1.5rem;
+      border-bottom: 3px solid var(--primary-red);
+      padding-bottom: 0.6rem;
+      display: inline-block;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.6rem;
+    }
+    .card {
+      background: white;
+      border: 1px solid #ffebee;
+      border-radius: 12px;
+      padding: 1.8rem;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      transition: all 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 28px rgba(230,0,18,0.15);
+      border-color: var(--primary-red);
+    }
+    .japanese {
+      font-size: 3.2rem;
+      font-weight: bold;
+      color: var(--primary-red);
+      margin-bottom: 0.6rem;
+      font-family: "Hiragino Mincho", "Yu Mincho", serif;
+    }
+    .roma {
+      font-size: 1.3rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .meaning {
+      font-size: 1.1rem;
+      color: var(--light-gray);
+    }
+    .speaker-btn {
+      background: var(--primary-red);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: all 0.2s;
+    }
+    .speaker-btn:hover {
+      background: var(--dark-red);
+      transform: scale(1.1);
+    }
+    footer {
+      text-align: center;
+      padding: 2.5rem;
+      background: var(--primary-red);
+      color: white;
+      font-size: 1.1rem;
+    }
+    @media (max-width: 768px) {
+      main { padding: 2rem 5% 5rem; }
+      h1 { font-size: 2.4rem; }
+      .japanese { font-size: 2.8rem; }
+      header { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="https://codepen.io/zuyruays-the-looper/full/ogzvodL" class="logo">和心日語</a>
+    <a href="https://codepen.io/weert-Gfii/full/pvELoPZ" class="back-btn">← 回首頁</a>
+    
+    <div class="voice-control">
+      <label>語音：</label>
+      <select id="voiceSelect"></select>
+      <label>語速：</label>
+      <input type="range" id="rateSlider" min="0.5" max="1.5" step="0.1" value="0.9">
+      <span id="rateValue">0.9x</span>
+    </div>
+  </header>
+
+  <main>
+    <h1>基礎生字表</h1>
+    <p class="subtitle">點擊喇叭聽發音 • 適合零基礎初學者練習</p>
+    
+    <h2 class="section-title">① 常用問候語 10 句</h2>
+    <div class="grid">
+      <!-- 這裡保持你原本的卡片不變 -->
+      <div class="card" data-text="おはよう">
+        <div class="japanese">おはよう</div>
+        <div class="roma">ohayō</div>
+        <div class="meaning">早安（非正式）</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card" data-text="おはようございます">
+        <div class="japanese">おはようございます</div>
+        <div class="roma">ohayō gozaimasu</div>
+        <div class="meaning">早安（有禮貌）</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card" data-text="こんにちは">
+        <div class="japanese">こんにちは</div>
+        <div class="roma">konnichiwa</div>
+        <div class="meaning">你好（白天）</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card" data-text="こんばんは">
+        <div class="japanese">こんばんは</div>
+        <div class="roma">konbanwa</div>
+        <div class="meaning">晚上好</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card" data-text="じゃあね">
+        <div class="japanese">じゃあね</div>
+        <div class="roma">jaa ne</div>
+        <div class="meaning">掰掰（朋友間）</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card" data-text="またね">
+        <div class="japanese">またね</div>
+        <div class="roma">mata ne</div>
+        <div class="meaning">待會見</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card" data-text="おやすみ">
+        <div class="japanese">おやすみ</div>
+        <div class="roma">oyasumi</div>
+        <div class="meaning">晚安（睡前）</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card" data-text="ありがとう">
+        <div class="japanese">ありがとう</div>
+        <div class="roma">arigatō</div>
+        <div class="meaning">謝謝</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card" data-text="ごめんなさい">
+        <div class="japanese">ごめんなさい</div>
+        <div class="roma">gomen nasai</div>
+        <div class="meaning">對不起</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card" data-text="いただきます">
+        <div class="japanese">いただきます</div>
+        <div class="roma">itadakimasu</div>
+        <div class="meaning">我開動了</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+    </div>
+
+    <h2 class="section-title">② 日語數字 1–10</h2>
+    <div class="grid">
+      <div class="card number" data-text="いち">
+        <div class="japanese">一</div>
+        <div class="roma">いち・ichi</div>
+        <div class="meaning">1</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card number" data-text="に">
+        <div class="japanese">二</div>
+        <div class="roma">に・ni</div>
+        <div class="meaning">2</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card number" data-text="さん">
+        <div class="japanese">三</div>
+        <div class="roma">さん・san</div>
+        <div class="meaning">3</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card number" data-text="よん">
+        <div class="japanese">四</div>
+        <div class="roma">よん・yon</div>
+        <div class="meaning">4（常用讀音）</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card number" data-text="ご">
+        <div class="japanese">五</div>
+        <div class="roma">ご・go</div>
+        <div class="meaning">5</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card number" data-text="ろく">
+        <div class="japanese">六</div>
+        <div class="roma">ろく・roku</div>
+        <div class="meaning">6</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card number" data-text="なな">
+        <div class="japanese">七</div>
+        <div class="roma">なな・nana</div>
+        <div class="meaning">7（常用讀音）</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card number" data-text="はち">
+        <div class="japanese">八</div>
+        <div class="roma">はち・hachi</div>
+        <div class="meaning">8</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card number" data-text="きゅう">
+        <div class="japanese">九</div>
+        <div class="roma">きゅう・kyū</div>
+        <div class="meaning">9</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+      <div class="card number" data-text="じゅう">
+        <div class="japanese">十</div>
+        <div class="roma">じゅう・jū</div>
+        <div class="meaning">10</div>
+        <button class="speaker-btn">🔊</button>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    點擊喇叭聽發音 • 使用瀏覽器語音合成 • 和心日語 2026
+  </footer>
+
+  <script>
+    let voices = [];
+    const voiceSelect = document.getElementById('voiceSelect');
+    const rateSlider = document.getElementById('rateSlider');
+    const rateValue = document.getElementById('rateValue');
+
+    // 載入可用語音
+    function loadVoices() {
+      voices = speechSynthesis.getVoices().filter(voice => voice.lang.includes('ja'));
+      
+      voiceSelect.innerHTML = '';
+      if (voices.length === 0) {
+        const option = document.createElement('option');
+        option.textContent = "載入日語語音中...";
+        voiceSelect.appendChild(option);
+        return;
+      }
+
+      voices.forEach((voice, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${voice.name} (${voice.lang})`;
+        voiceSelect.appendChild(option);
+      });
+
+      // 預設選擇女聲（常見的 Google 日語女聲）
+      const defaultVoice = voices.findIndex(v => 
+        v.name.includes('Google') && (v.name.includes('Japanese') || v.name.includes('Kyoko'))
+      );
+      if (defaultVoice !== -1) voiceSelect.value = defaultVoice;
+    }
+
+    // 更新語速顯示
+    rateSlider.addEventListener('input', () => {
+      rateValue.textContent = rateSlider.value + 'x';
+    });
+
+    // 播放語音
+    function speak(text) {
+      if (!('speechSynthesis' in window)) {
+        alert("您的瀏覽器不支援語音功能，請使用 Chrome 或 Edge");
+        return;
+      }
+
+      speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ja-JP';
+      utterance.rate = parseFloat(rateSlider.value);
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+
+      // 使用選擇的語音
+      const selectedIndex = parseInt(voiceSelect.value);
+      if (!isNaN(selectedIndex) && voices[selectedIndex]) {
+        utterance.voice = voices[selectedIndex];
+      }
+
+      speechSynthesis.speak(utterance);
+    }
+
+    // 綁定所有喇叭按鈕
+    document.querySelectorAll('.speaker-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.card');
+        const text = card.dataset.text;
+        if (text) speak(text);
+      });
+    });
+
+    // 初始化
+    if ('speechSynthesis' in window) {
+      speechSynthesis.onvoiceschanged = loadVoices;
+      loadVoices(); // 有些瀏覽器需要立即呼叫
+    } else {
+      alert("您的瀏覽器不支援語音播放功能，建議使用最新版 Chrome 或 Edge");
+    }
+  </script>
+</body>
+</html>

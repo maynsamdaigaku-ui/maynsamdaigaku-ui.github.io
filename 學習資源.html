@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>和心日語 - 學習資源｜Ninjapanese YouTube 推薦</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Noto Sans TC', system-ui, sans-serif;
+      background: #ffffff;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
+    :root {
+      --primary-red: #e60012;
+      --dark-red: #c8102e;
+      --gray: #444;
+      --light-gray: #777;
+    }
+
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 1.2rem 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--primary-red);
+      text-decoration: none;
+    }
+
+    .back-btn {
+      color: var(--gray);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+
+    .back-btn:hover { color: var(--primary-red); }
+
+    main {
+      padding: 3rem 6% 6rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      color: var(--primary-red);
+      text-align: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--light-gray);
+      font-size: 1.3rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-title {
+      font-size: 2.1rem;
+      color: var(--dark-red);
+      margin: 3rem 0 1.5rem;
+      border-bottom: 3px solid var(--primary-red);
+      padding-bottom: 0.6rem;
+      display: inline-block;
+    }
+
+    .video-embed {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 比例 */
+      height: 0;
+      overflow: hidden;
+      max-width: 100%;
+      background: #000;
+      margin: 2rem auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .video-embed iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    .video-list {
+      margin-top: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 1.05rem;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background: #fff5f5;
+      color: var(--dark-red);
+      font-weight: 700;
+    }
+
+    tr:hover {
+      background: #fffafafa;
+    }
+
+    .video-link {
+      color: var(--primary-red);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .video-link:hover {
+      text-decoration: underline;
+    }
+
+    .recommend {
+      background: #fff5f5;
+      padding: 1.8rem;
+      border-radius: 12px;
+      border-left: 5px solid var(--primary-red);
+      margin: 2.5rem 0;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem;
+      background: var(--primary-red);
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      main { padding: 2rem 5% 5rem; }
+      h1 { font-size: 2.4rem; }
+      table { font-size: 0.95rem; }
+      th, td { padding: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="https://codepen.io/zuyruays-the-looper/full/ogzvodL" class="logo">和心日語</a>
+    <a href="https://codepen.io/zuyruays-the-looper/full/ogzvodL" class="back-btn">← 回首頁</a>
+  </header>
+
+  <main>
+    <h1>推薦學習資源</h1>
+    <p class="subtitle">Ninjapanese YouTube 播放清單 - 日语学习</p>
+
+    <div class="recommend">
+      <strong>為什麼推薦這個清單？</strong><br>
+      • 專為 JLPT N5 初學者設計，單字簡單實用（身體部位、動詞、蔬果、動物、飲料等）<br>
+      • 每支影片短而精（大多 3–10 分鐘），發音清晰 + 英文/日文解說<br>
+      • 頻道 Ninjapanese 專注基礎日語，已有 19 萬+ 訂閱者，適合零基礎練習聽說讀<br>
+      • 總共 8 支影片，適合每天看 1–2 支，循序漸進記單字
+    </div>
+
+    <!-- 嵌入第一支影片作為預覽 -->
+    <h2 class="section-title">精選影片預覽</h2>
+    <div class="video-embed">
+      <iframe src="https://www.youtube.com/embed/j6YuhK6T5f4" 
+              title="【 Body Parts in Japanese 】" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen></iframe>
+    </div>
+
+    <h2 class="section-title">完整影片清單（8 支）</h2>
+    <div class="video-list">
+      <table>
+        <thead>
+          <tr>
+            <th>順序</th>
+            <th>影片標題</th>
+            <th>持續時間</th>
+            <th>觀看連結</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>【 Body Parts in Japanese | からだのパーツ】face/かお, body/からだ, mouth/くち, hand/てvocabulary</td>
+            <td>5:27</td>
+            <td><a href="https://www.youtube.com/watch?v=j6YuhK6T5f4" class="video-link" target="_blank">觀看影片 →</a></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>【JLPTN5 Verbs】You Must Know! [Masu Form] | Japanese vocabulary</td>
+            <td>10:21</td>
+            <td><a href="https://www.youtube.com/watch?v=1OSw0RD0mYw" class="video-link" target="_blank">觀看影片 →</a></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>【JLPTN5 Verbs】You Must Know! [Masu Form] Part2 | Japanese vocabulary</td>
+            <td>7:37</td>
+            <td><a href="https://www.youtube.com/watch?v=o_cwH7HOH84" class="video-link" target="_blank">觀看影片 →</a></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>【JLPTN5 Vegetables】in Japanese やさい/野菜 (yasai) | Japanese Vocabulary</td>
+            <td>5:13</td>
+            <td><a href="https://www.youtube.com/watch?v=ryvTwyBM348" class="video-link" target="_blank">觀看影片 →</a></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>【JLPTN5 Fruits】果物(Kudamono) | Japanese Vocabulary</td>
+            <td>3:55</td>
+            <td><a href="https://www.youtube.com/watch?v=BMfU-tSujAY" class="video-link" target="_blank">觀看影片 →</a></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>【Sea Animals/ Fishes】in Japanese うみの生き物(umi no ikimono) | Japanese Vocabulary</td>
+            <td>4:21</td>
+            <td><a href="https://www.youtube.com/watch?v=iE1UJDbJwxo" class="video-link" target="_blank">觀看影片 →</a></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>【Animal】in Japanese どうぶつ/動物 | Japanese vocabulary</td>
+            <td>4:51</td>
+            <td><a href="https://www.youtube.com/watch?v=2vY_tDet87U" class="video-link" target="_blank">觀看影片 →</a></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>【JLPTN5 Drinks/beverage】のみもの(nomimono) MUST KNOW| Japanese vocabulary</td>
+            <td>3:38</td>
+            <td><a href="https://www.youtube.com/watch?v=V2X1mT3KJRU" class="video-link" target="_blank">觀看影片 →</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="text-align:center; margin-top:3rem; font-size:1.1rem; color:#555;">
+      完整播放清單連結：<br>
+      <a href="https://www.youtube.com/playlist?list=PLOm8TV7aBmdM-NGgM5dMwhU89zNb0FhLW" target="_blank" style="color:var(--primary-red); font-weight:bold;">
+        https://www.youtube.com/playlist?list=PLOm8TV7aBmdM-NGgM5dMwhU89zNb0FhLW
+      </a>
+    </p>
+
+  </main>
+
+  <footer>
+    推薦資源來自 Ninjapanese YouTube • 和心日語 2026
+  </footer>
+
+</body>
+</html>

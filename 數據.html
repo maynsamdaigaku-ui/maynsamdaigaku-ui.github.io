@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>日本城市興趣趨勢視覺化 (Google Trends 風格)</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 20px; background: #f8f9fa; }
+    h1, h2 { text-align: center; color: #333; }
+    .chart-container { 
+      max-width: 1000px; 
+      margin: 40px auto; 
+      padding: 20px; 
+      background: white; 
+      border-radius: 10px; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+    @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Noto Sans TC', system-ui, -apple-system, sans-serif;
+      background: #ffffff;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+    :root {
+      --primary-red: #e60012;
+      --dark-red: #c8102e;
+      --gray: #444;
+      --light-gray: #777;
+    }
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 1.2rem 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--primary-red);
+      text-decoration: none;
+    }
+    .back-btn {
+      color: var(--gray);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+    .back-btn:hover { color: var(--primary-red); }
+    main {
+      padding: 3rem 6% 6rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 2.8rem;
+      color: var(--primary-red);
+      text-align: center;
+      margin-bottom: 0.8rem;
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--light-gray);
+      font-size: 1.3rem;
+      margin-bottom: 3rem;
+    }
+    .section-title {
+      font-size: 2.1rem;
+      color: var(--dark-red);
+      margin: 3rem 0 1.5rem;
+      border-bottom: 3px solid var(--primary-red);
+      padding-bottom: 0.6rem;
+      display: inline-block;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.6rem;
+    }
+    .card {
+      background: white;
+      border: 1px solid #ffebee;
+      border-radius: 12px;
+      padding: 1.8rem;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      transition: all 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 28px rgba(230,0,18,0.15);
+      border-color: var(--primary-red);
+    }
+    .japanese {
+      font-size: 3.2rem;
+      font-weight: bold;
+      color: var(--primary-red);
+      margin-bottom: 0.6rem;
+      font-family: "Hiragino Mincho", "Yu Mincho", serif;
+    }
+    .roma {
+      font-size: 1.3rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .meaning {
+      font-size: 1.1rem;
+      color: var(--light-gray);
+    }
+    .speaker-btn {
+      background: var(--primary-red);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: all 0.2s;
+    }
+    .speaker-btn:hover {
+      background: var(--dark-red);
+      transform: scale(1.1);
+    }
+    .number .japanese {
+      color: #b71c1c;
+    }
+    footer {
+      text-align: center;
+      padding: 2.5rem;
+      background: var(--primary-red);
+      color: white;
+      font-size: 1.1rem;
+    }
+    @media (max-width: 768px) {
+      main { padding: 2rem 5% 5rem; }
+      h1 { font-size: 2.4rem; }
+      .japanese { font-size: 2.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <!-- 已改成你的 CodePen 首頁連結 -->
+    <a href="https://codepen.io/zuyruays-the-looper/full/ogzvodL" class="logo">和心日語</a>
+    <a href="https://codepen.io/weert-Gfii/full/pvELoPZ" class="back-btn">← 回首頁</a>
+  </header>
+
+<h1>日本主要城市興趣趨勢比較 (2025/3 – 2026/3)</h1>
+
+<div class="chart-container">
+  <h2>折線圖：時間趨勢</h2>
+  <canvas id="lineChart" height="100"></canvas>
+</div>
+
+<div class="grid-2">
+  <div class="chart-container">
+    <h2>長條圖：最新一週比較 (2026-03-15)</h2>
+    <canvas id="barChart" height="80"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h2>圓餅圖：最新一週佔比</h2>
+    <canvas id="pieChart" height="80"></canvas>
+  </div>
+</div>
+
+<script>
+// 資料（直接從你的 CSV 轉入）
+const labels = [
+  "2025-03-16","2025-03-23","2025-03-30","2025-04-06","2025-04-13","2025-04-20","2025-04-27",
+  "2025-05-04","2025-05-11","2025-05-18","2025-05-25","2025-06-01","2025-06-08","2025-06-15",
+  "2025-06-22","2025-06-29","2025-07-06","2025-07-13","2025-07-20","2025-07-27","2025-08-03",
+  "2025-08-10","2025-08-17","2025-08-24","2025-08-31","2025-09-07","2025-09-14","2025-09-21",
+  "2025-09-28","2025-10-05","2025-10-12","2025-10-19","2025-10-26","2025-11-02","2025-11-09",
+  "2025-11-16","2025-11-23","2025-11-30","2025-12-07","2025-12-14","2025-12-21","2025-12-28",
+  "2026-01-04","2026-01-11","2026-01-18","2026-01-25","2026-02-01","2026-02-08","2026-02-15",
+  "2026-02-22","2026-03-01","2026-03-08","2026-03-15"
+];
+
+const tokyo    = [61,57,63,59,61,61,63,65,69,64,62,60,59,65,69,64,67,73,69,74,88,94,89,78,89,91,100,87,91,85,86,81,78,76,77,74,78,84,75,72,65,61,60,66,66,70,74,77,75,72,73,70,72];
+const hokkaido = [12,11,11,11,12,12,12,12,13,12,12,14,13,13,13,12,13,15,16,17,15,16,16,14,14,15,13,14,14,14,14,14,14,13,13,13,13,15,17,14,12,11,13,13,14,15,15,14,13,13,13,13,13];
+const osaka    = [49,49,51,53,57,54,52,49,53,51,52,52,53,50,49,48,50,56,55,56,64,62,63,59,68,62,62,61,62,56,59,55,50,51,51,51,50,52,47,49,47,42,45,46,49,49,49,52,48,50,50,51,51];
+const kamakura = [3,3,3,3,4,4,4,4,3,3,4,4,4,4,4,3,3,4,3,3,4,4,3,3,4,4,3,4,4,4,4,4,3,3,4,4,4,4,3,3,3,3,3,3,3,3,4,3,3,3,3,3,4];
+const fukuoka  = [21,21,21,21,22,22,21,23,22,21,20,21,22,21,21,20,22,24,23,23,28,29,26,25,26,26,24,24,24,25,26,25,22,25,25,24,24,23,23,23,22,20,22,22,22,22,23,23,22,24,23,24,25];
+
+// 顏色
+const colors = {
+  tokyo:    'rgba(220, 53, 69, 0.9)',   // red
+  hokkaido: 'rgba(40, 167, 69, 0.9)',   // green
+  osaka:    'rgba(0, 123, 255, 0.9)',   // blue
+  kamakura: 'rgba(255, 193, 7,  0.9)',  // yellow
+  fukuoka:  'rgba(111, 66, 193, 0.9)',  // purple
+};
+
+// 1. 折線圖
+new Chart(document.getElementById('lineChart'), {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [
+      { label: '東京都', data: tokyo,    borderColor: colors.tokyo,    backgroundColor: colors.tokyo,    fill: false, tension: 0.2 },
+      { label: '北海道', data: hokkaido, borderColor: colors.hokkaido, backgroundColor: colors.hokkaido, fill: false, tension: 0.2 },
+      { label: '大阪市', data: osaka,    borderColor: colors.osaka,    backgroundColor: colors.osaka,    fill: false, tension: 0.2 },
+      { label: '鐮倉市', data: kamakura, borderColor: colors.kamakura, backgroundColor: colors.kamakura, fill: false, tension: 0.2 },
+      { label: '福岡市', data: fukuoka,  borderColor: colors.fukuoka,  backgroundColor: colors.fukuoka,  fill: false, tension: 0.2 }
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      x: { type: 'time', time: { unit: 'week' }, title: { display: true, text: '週' } },
+      y: { title: { display: true, text: '興趣值' }, min: 0, max: 110 }
+    }
+  }
+});
+
+// 最新一週資料 (最後一筆)
+const latest = {
+  labels: ['東京都', '北海道', '大阪市', '鐮倉市', '福岡市'],
+  values: [tokyo.at(-1), hokkaido.at(-1), osaka.at(-1), kamakura.at(-1), fukuoka.at(-1)],
+  colors: [colors.tokyo, colors.hokkaido, colors.osaka, colors.kamakura, colors.fukuoka]
+};
+
+// 2. 長條圖
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: latest.labels,
+    datasets: [{
+      label: '興趣值 (2026-03-15)',
+      data: latest.values,
+      backgroundColor: latest.colors,
+      borderColor: latest.colors.map(c => c.replace('0.9', '1')),
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true, max: 100 } }
+  }
+});
+
+// 3. 圓餅圖
+new Chart(document.getElementById('pieChart'), {
+  type: 'pie',
+  data: {
+    labels: latest.labels,
+    datasets: [{
+      data: latest.values,
+      backgroundColor: latest.colors,
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' },
+      tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw} (${((ctx.raw / latest.values.reduce((a,b)=>a+b,0))*100).toFixed(1)}%)` } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

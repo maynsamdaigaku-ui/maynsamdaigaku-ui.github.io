@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>假名忍者闯关记</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #ffffff, #ffebee);
+            color: #1a1a1a;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 新增的頂部導航欄 */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 12px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 200;
+        }
+        .logo {
+            font-size: 1.65rem;
+            font-weight: 900;
+            color: #e60012;
+            text-decoration: none;
+        }
+        .back-btn {
+            color: #555;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .back-btn:hover {
+            color: #e60012;
+        }
+
+        .game-container {
+            flex: 1;
+            width: 100%;
+            background: #ffffff;
+            box-shadow: 0 0 60px rgba(230, 0, 18, 0.6);
+            position: relative;
+            overflow: hidden;
+            border-top: 8px solid #e60012;
+        }
+
+        .header-game {
+            background: #e60012;
+            color: white;
+            padding: 16px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stats {
+            display: flex;
+            gap: 35px;
+            align-items: center;
+        }
+
+        .hp-bar {
+            width: 230px;
+            height: 24px;
+            background: #ffffff;
+            border: 3px solid #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .hp-fill {
+            height: 100%;
+            background: linear-gradient(to right, #ff4444, #e60012);
+            width: 100%;
+            transition: width 0.4s;
+        }
+
+        .main-area {
+            height: calc(100% - 180px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            background: linear-gradient(to bottom, #fff0f0, #ffebee);
+        }
+
+        .scene-title {
+            font-size: 34px;
+            margin-bottom: 25px;
+            color: #e60012;
+            text-shadow: 0 0 15px rgba(230, 0, 18, 0.3);
+            font-weight: bold;
+        }
+
+        .question {
+            font-size: 28px;
+            margin: 25px 0;
+            min-height: 120px;
+            text-align: center;
+            background: white;
+            padding: 32px;
+            border-radius: 20px;
+            width: 85%;
+            max-width: 820px;
+            border: 5px solid #e60012;
+            box-shadow: 0 8px 20px rgba(230, 0, 18, 0.1);
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+            width: 85%;
+            max-width: 820px;
+            margin-top: 30px;
+        }
+
+        .option-btn {
+            background: #e60012;
+            border: 5px solid #ffffff;
+            color: white;
+            font-size: 24px;
+            padding: 24px;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 6px 15px rgba(230, 0, 18, 0.3);
+        }
+
+        .option-btn:hover {
+            background: #ff3333;
+            transform: scale(1.06);
+        }
+
+        .feedback {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 85px;
+            font-weight: bold;
+            padding: 35px 110px;
+            border-radius: 30px;
+            display: none;
+            z-index: 100;
+            box-shadow: 0 0 50px rgba(0,0,0,0.3);
+        }
+
+        .correct { 
+            background: rgba(255, 255, 255, 0.95); 
+            color: #e60012; 
+            border: 6px solid #e60012;
+        }
+        .wrong { 
+            background: #e60012; 
+            color: white; 
+        }
+
+        .footer {
+            background: #e60012;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .ninja {
+            position: absolute;
+            bottom: 35px;
+            left: 60px;
+            font-size: 120px;
+            transition: all 0.5s;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 新增的頂部導航 -->
+    <header>
+        <a href="https://codepen.io/zuyruays-the-looper/full/ogzvodL" class="logo">和心日語</a>
+        <a href="https://codepen.io/weert-Gfii/full/pvELoPZ" class="back-btn">← 回首頁</a>
+    </header>
+
+    <div class="game-container">
+        <!-- 遊戲內部標題欄 -->
+        <div class="header-game">
+            <div>
+                <h1 style="margin:0; font-size:28px;">🥷 假名忍者闯关记</h1>
+                <p style="margin:6px 0 0 0; font-size:17px;">第 <span id="level">1</span> 關：東京機場</p>
+            </div>
+            <div class="stats">
+                <div>
+                    <div style="font-size:14px; opacity:0.9;">生命值</div>
+                    <div class="hp-bar"><div id="hp-fill" class="hp-fill"></div></div>
+                </div>
+                <div>
+                    <div style="font-size:14px; opacity:0.9;">分數</div>
+                    <div id="score" style="font-size:36px; color:#ffff88;">0</div>
+                </div>
+                <div>
+                    <div style="font-size:14px; opacity:0.9;">忍者等級</div>
+                    <div id="ninja-lv" style="font-size:36px; color:#ffff88;">Lv.1</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 遊戲主區域 -->
+        <div class="main-area">
+            <div class="ninja" id="ninja">🥷</div>
+            
+            <div class="scene-title" id="scene-title">東京機場 - 平假名挑戰</div>
+            
+            <div class="question" id="question"></div>
+            
+            <div class="options" id="options"></div>
+            
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <!-- 底部 -->
+        <div class="footer">
+            <button onclick="nextQuestion()" 
+                    style="padding:14px 34px; font-size:18px; background:white; color:#e60012; border:none; border-radius:12px; font-weight:bold; cursor:pointer;">
+                下一題 →
+            </button>
+            
+            <div style="text-align:center;">
+                <div style="width:400px; height:18px; background:#ffffff33; border-radius:10px; overflow:hidden; border:2px solid #ffffff;">
+                    <div id="progress-fill" style="height:100%; background:#ffffff; width:8%; transition:width 0.5s;"></div>
+                </div>
+                <div style="margin-top:6px; font-size:16px;">進度 <span id="progress-text">1/15</span></div>
+            </div>
+            
+            <div style="font-size:16px;">第1關</div>
+        </div>
+    </div>
+
+    <script>
+        let hp = 100;
+        let score = 0;
+        let level = 1;
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+
+        const level1Questions = [
+            { q: "下面哪個是「にほんご」的平假名寫法？", options: ["にほんご", "ニホンゴ", "日本语", "に本语"], answer: 0 },
+            { q: "「こんにちは」的羅馬音是？", options: ["konnichiwa", "arigatou", "sayounara", "ohayou"], answer: 0 },
+            { q: "「ありがとうございます」意思是？", options: ["對不起", "謝謝", "再見", "你好"], answer: 1 },
+            { q: "「すみません」在機場最常用來做什麼？", options: ["點餐", "道歉 / 打擾", "買票", "問時間"], answer: 1 },
+            { q: "「おはようございます」是早上打招呼的說法嗎？", options: ["是的", "不是，是晚上用的", "是中午用的", "是道歉用的"], answer: 0 },
+            { q: "「水」的日語平假名是？", options: ["みず", "みづ", "みす", "ひず"], answer: 0 },
+            { q: "「食べる」（taberu）意思是？", options: ["喝", "吃", "走", "跑"], answer: 1 },
+            { q: "「かわいい」是什麼意思？", options: ["好吃", "可愛", "漂亮（正式）", "很大"], answer: 1 },
+            { q: "「はい」代表什麼？", options: ["不是", "是的", "謝謝", "再見"], answer: 1 },
+            { q: "「さようなら」的正確平假名是？", options: ["さよなら", "さようなら", "サヨウナラ", "さよなら"], answer: 1 },
+            { q: "「ありがとう」的平假名怎麼寫？", options: ["有難う", "ありがとう", "アリガトウ", "ありがとうございます"], answer: 1 },
+            { q: "「いいえ」意思是？", options: ["是的", "不是", "謝謝", "請"], answer: 1 },
+            { q: "「名前」（なまえ）意思是？", options: ["年齡", "名字", "國家", "食物"], answer: 1 },
+            { q: "「学校」的平假名是？", options: ["がっこう", "がこう", "がっこ", "がっこうう"], answer: 0 },
+            { q: "在機場說「お願いします」最常用在？", options: ["道歉時", "拜託別人時", "說再見時", "吃東西時"], answer: 1 }
+        ];
+
+        let currentQuestions = level1Questions;
+
+        function updateStats() {
+            document.getElementById('hp-fill').style.width = hp + '%';
+            document.getElementById('score').textContent = score;
+            document.getElementById('ninja-lv').textContent = 'Lv.' + level;
+            document.getElementById('level').textContent = level;
+        }
+
+        function showFeedback(isCorrect) {
+            const feedback = document.getElementById('feedback');
+            feedback.style.display = 'block';
+            
+            if (isCorrect) {
+                feedback.textContent = '💖 正確！';
+                feedback.className = 'feedback correct';
+                score += 130;
+                correctCount++;
+            } else {
+                feedback.textContent = '💔 錯了';
+                feedback.className = 'feedback wrong';
+                hp = Math.max(0, hp - 20);
+            }
+            updateStats();
+
+            setTimeout(() => {
+                feedback.style.display = 'none';
+                nextQuestion();
+            }, 1400);
+        }
+
+        function loadQuestion() {
+            const q = currentQuestions[currentQuestionIndex];
+            document.getElementById('question').textContent = q.q;
+
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => {
+                    Array.from(optionsDiv.children).forEach(b => b.disabled = true);
+                    if (index === q.answer) {
+                        showFeedback(true);
+                    } else {
+                        showFeedback(false);
+                    }
+                };
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex >= currentQuestions.length) {
+                if (correctCount >= 10) {
+                    alert(`🎉 恭喜通關第${level}關！\n獲得2000分獎勵！`);
+                    score += 2000;
+                } else {
+                    alert('💪 再努力一次！這關至少需要10題正確才能過關～');
+                }
+                currentQuestionIndex = 0;
+                correctCount = 0;
+            }
+
+            const progress = Math.round((currentQuestionIndex / currentQuestions.length) * 100);
+            document.getElementById('progress-fill').style.width = progress + '%';
+            document.getElementById('progress-text').textContent = `${currentQuestionIndex + 1}/${currentQuestions.length}`;
+
+            updateStats();
+            loadQuestion();
+        }
+
+        window.onload = function() {
+            updateStats();
+            loadQuestion();
+            
+            const ninja = document.getElementById('ninja');
+            setInterval(() => {
+                ninja.style.transform = 'translateY(-30px) rotate(12deg)';
+                setTimeout(() => ninja.style.transform = 'translateY(0) rotate(0)', 650);
+            }, 2200);
+        };
+    </script>
+</body>
+</html>
