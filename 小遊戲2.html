@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>假名射擊遊戲 - 和心日語</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans TC', system-ui, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+        :root {
+            --primary-red: #e60012;
+            --dark-red: #c8102e;
+            --gray: #444;
+            --light-gray: #777;
+        }
+
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            z-index: 1000;
+            padding: 1rem 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--primary-red);
+        }
+        nav a {
+            margin-left: 1.8rem;
+            text-decoration: none;
+            color: var(--gray);
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        nav a:hover { color: var(--primary-red); }
+
+        main {
+            padding-top: 90px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff 0%, #fffaf5 100%);
+        }
+
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 6%;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .game-header h1 {
+            font-size: 3rem;
+            color: var(--primary-red);
+            margin-bottom: 0.5rem;
+        }
+        .game-header p {
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+
+        .difficulty-selector {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .difficulty-btn {
+            padding: 0.8rem 1.6rem;
+            border: 2px solid var(--primary-red);
+            background: white;
+            color: var(--primary-red);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .difficulty-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(230,0,18,0.2);
+        }
+        .difficulty-btn.active {
+            background: var(--primary-red);
+            color: white;
+        }
+
+        .question-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            min-height: 120px;
+        }
+        .question-label {
+            font-size: 0.95rem;
+            color: var(--light-gray);
+            margin-bottom: 0.8rem;
+        }
+        .question-text {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--primary-red);
+            margin-bottom: 0.5rem;
+        }
+        .question-hint {
+            font-size: 1.05rem;
+            color: var(--gray);
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .info-item {
+            background: white;
+            padding: 1.5rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            min-width: 160px;
+            text-align: center;
+        }
+        .info-label {
+            font-size: 0.9rem;
+            color: var(--light-gray);
+            font-weight: 500;
+        }
+        .info-value {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--primary-red);
+        }
+
+        .game-area {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            padding: 2rem;
+            position: relative;
+            min-height: 560px;
+            overflow: hidden;
+            cursor: crosshair;
+        }
+        .game-canvas-wrapper {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(to bottom, #f9f9f9, #f0f0f0);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .target {
+            position: absolute;
+            width: 68px;
+            height: 68px;
+            background: var(--primary-red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 4px 15px rgba(230,0,18,0.35);
+            transition: all 0.15s;
+        }
+        .target:hover {
+            transform: scale(1.12);
+            box-shadow: 0 8px 20px rgba(230,0,18,0.5);
+        }
+        .target.clicked {
+            animation: hitAnimation 0.45s ease-out forwards;
+        }
+
+        @keyframes hitAnimation {
+            0%   { transform: scale(1); }
+            40%  { transform: scale(1.35); }
+            100% { transform: scale(0.1); opacity: 0; }
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .btn {
+            padding: 1rem 2.8rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: var(--primary-red);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--dark-red); transform: translateY(-3px); }
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-secondary {
+            background: white;
+            color: var(--primary-red);
+            border: 2px solid var(--primary-red);
+        }
+        .btn-secondary:hover {
+            background: var(--primary-red);
+            color: white;
+        }
+
+        .game-over {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 3rem 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            z-index: 2000;
+            text-align: center;
+            min-width: 340px;
+        }
+        .game-over.show { display: block; }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1999;
+        }
+        .overlay.show { display: block; }
+
+        .feedback {
+            position: fixed;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.15rem;
+            z-index: 1500;
+            opacity: 0;
+            transition: all 0.4s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .feedback.show { opacity: 1; transform: translateX(-50%) translateY(10px); }
+        .feedback.correct { color: #27ae60; border-left: 5px solid #27ae60; background: #f0fff4; }
+        .feedback.incorrect { color: #e74c3c; border-left: 5px solid #e74c3c; background: #fff0f0; }
+
+        footer {
+            background: var(--primary-red);
+            color: white;
+            text-align: center;
+            padding: 3rem 6%;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .target { width: 55px; height: 55px; font-size: 1.4rem; }
+            .game-canvas-wrapper { height: 380px; }
+            .question-text { font-size: 2.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 導航 -->
+    <header>
+        <div class="logo">和心日語</div>
+        <nav>
+            <a href="index.html">首頁</a>
+            <a href="生字表.html">生字表</a>
+            <a href="學習資源.html">學習資源</a>
+            <a href="五十音圖.html">五十音</a>
+            <a href="數據.html">學習熱度</a>
+            <a href="假名忍者闯关记.html">小遊戲</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="game-container">
+            <div class="game-header">
+                <h1>假名射擊闖關</h1>
+                <p>點擊紅色目標，選擇正確的羅馬字來擊敗敵人！</p>
+            </div>
+
+            <!-- 難度選擇 -->
+            <div class="difficulty-selector">
+                <button class="difficulty-btn active" onclick="setDifficulty('hiragana')">平假名</button>
+                <button class="difficulty-btn" onclick="setDifficulty('katakana')">片假名</button>
+                <button class="difficulty-btn" onclick="setDifficulty('mixed')">混合模式</button>
+            </div>
+
+            <!-- 問題顯示 -->
+            <div class="question-box">
+                <div class="question-label">目前假名</div>
+                <div class="question-text" id="currentQuestion">ん</div>
+                <div class="question-hint" id="currentHint">點擊下方目標選擇正確羅馬字</div>
+            </div>
+
+            <!-- 遊戲資訊 -->
+            <div class="game-info">
+                <div class="info-item">
+                    <div class="info-label">得分</div>
+                    <div class="info-value" id="scoreDisplay">0</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">時間</div>
+                    <div class="info-value" id="timerDisplay">30</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">命中</div>
+                    <div class="info-value" id="hitsDisplay">0 / 10</div>
+                </div>
+            </div>
+
+            <!-- 遊戲區域 -->
+            <div class="game-area">
+                <div class="game-canvas-wrapper" id="gameCanvas"></div>
+            </div>
+
+            <!-- 控制按鈕 -->
+            <div class="game-controls">
+                <button class="btn btn-primary" id="startBtn" onclick="startGame()">開始遊戲</button>
+                <button class="btn btn-secondary" id="resetBtn" onclick="resetGame()" style="display:none;">重新開始</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 遊戲結束彈窗 -->
+    <div class="overlay" id="gameOverOverlay"></div>
+    <div class="game-over" id="gameOverModal">
+        <h2 id="gameOverTitle">遊戲結束！</h2>
+        <div class="final-stats">
+            <div>最終得分：<span class="stat-value" id="finalScore">0</span></div>
+            <div>命中次數：<span class="stat-value" id="finalHits">0</span> / 10</div>
+            <div>準確度：<span class="stat-value" id="finalAccuracy">0%</span></div>
+        </div>
+        <div class="game-over-buttons">
+            <button class="btn btn-primary" onclick="startGame()">再玩一次</button>
+            <button class="btn btn-secondary" onclick="goHome()">返回首頁</button>
+        </div>
+    </div>
+
+    <!-- 反饋提示 -->
+    <div class="feedback" id="feedback"></div>
+
+    <!-- 頁尾 -->
+    <footer>
+        <h2 style="font-size:2rem; margin-bottom:1rem;">邊玩邊學日語</h2>
+        <p>© 2026 和心日語　讓學習變得簡單有趣</p>
+    </footer>
+
+    <script>
+        // 遊戲數據
+        const hiraganaData = [
+            { kana: 'あ', romaji: 'a' }, { kana: 'い', romaji: 'i' }, { kana: 'う', romaji: 'u' },
+            { kana: 'え', romaji: 'e' }, { kana: 'お', romaji: 'o' },
+            { kana: 'か', romaji: 'ka' }, { kana: 'き', romaji: 'ki' }, { kana: 'く', romaji: 'ku' },
+            { kana: 'け', romaji: 'ke' }, { kana: 'こ', romaji: 'ko' },
+            { kana: 'さ', romaji: 'sa' }, { kana: 'し', romaji: 'shi' }, { kana: 'す', romaji: 'su' },
+            { kana: 'せ', romaji: 'se' }, { kana: 'そ', romaji: 'so' },
+            { kana: 'ん', romaji: 'n' }
+        ];
+
+        const katakanaData = [
+            { kana: 'ア', romaji: 'a' }, { kana: 'イ', romaji: 'i' }, { kana: 'ウ', romaji: 'u' },
+            { kana: 'エ', romaji: 'e' }, { kana: 'オ', romaji: 'o' },
+            { kana: 'カ', romaji: 'ka' }, { kana: 'キ', romaji: 'ki' }, { kana: 'ク', romaji: 'ku' },
+            { kana: 'ケ', romaji: 'ke' }, { kana: 'コ', romaji: 'ko' },
+            { kana: 'サ', romaji: 'sa' }, { kana: 'シ', romaji: 'shi' }, { kana: 'ス', romaji: 'su' },
+            { kana: 'セ', romaji: 'se' }, { kana: 'ソ', romaji: 'so' }
+        ];
+
+        // 遊戲狀態
+        let gameState = {
+            isRunning: false,
+            score: 0,
+            hits: 0,
+            targetHits: 10,
+            timeLeft: 30,
+            difficulty: 'hiragana',
+            currentQuestion: null,
+            usedQuestions: [],
+            timerInterval: null
+        };
+
+        function setDifficulty(level) {
+            if (gameState.isRunning) return;
+            gameState.difficulty = level;
+
+            document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            resetGame();
+        }
+
+        function startGame() {
+            gameState.isRunning = true;
+            gameState.score = 0;
+            gameState.hits = 0;
+            gameState.timeLeft = 30;
+            gameState.usedQuestions = [];
+
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('resetBtn').style.display = 'inline-block';
+            document.getElementById('gameOverOverlay').classList.remove('show');
+            document.getElementById('gameOverModal').classList.remove('show');
+
+            updateDisplay();
+            generateNewTarget();
+
+            // 計時器
+            if (gameState.timerInterval) clearInterval(gameState.timerInterval);
+            gameState.timerInterval = setInterval(() => {
+                gameState.timeLeft--;
+                updateDisplay();
+                if (gameState.timeLeft <= 0) endGame();
+            }, 1000);
+        }
+
+        function endGame() {
+            gameState.isRunning = false;
+            clearInterval(gameState.timerInterval);
+
+            const accuracy = gameState.targetHits === 0 ? 0 : 
+                Math.round((gameState.hits / gameState.targetHits) * 100);
+
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('finalHits').textContent = gameState.hits;
+            document.getElementById('finalAccuracy').textContent = accuracy + '%';
+
+            document.getElementById('gameOverOverlay').classList.add('show');
+            document.getElementById('gameOverModal').classList.add('show');
+            document.getElementById('gameCanvas').innerHTML = '';
+        }
+
+        function resetGame() {
+            gameState.isRunning = false;
+            gameState.score = 0;
+            gameState.hits = 0;
+            gameState.timeLeft = 30;
+            gameState.usedQuestions = [];
+
+            if (gameState.timerInterval) clearInterval(gameState.timerInterval);
+
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('resetBtn').style.display = 'none';
+            document.getElementById('gameOverOverlay').classList.remove('show');
+            document.getElementById('gameOverModal').classList.remove('show');
+            document.getElementById('gameCanvas').innerHTML = '';
+
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            document.getElementById('scoreDisplay').textContent = gameState.score;
+            document.getElementById('timerDisplay').textContent = gameState.timeLeft;
+            document.getElementById('hitsDisplay').textContent = `${gameState.hits} / ${gameState.targetHits}`;
+        }
+
+        function generateNewTarget() {
+            if (!gameState.isRunning) return;
+
+            const dataSource = gameState.difficulty === 'katakana' ? katakanaData :
+                              gameState.difficulty === 'mixed' ? [...hiraganaData, ...katakanaData] :
+                              hiraganaData;
+
+            // 選擇題目（避免短時間重複）
+            let question;
+            do {
+                question = dataSource[Math.floor(Math.random() * dataSource.length)];
+            } while (gameState.usedQuestions.includes(question.kana) && gameState.usedQuestions.length > 4);
+
+            gameState.currentQuestion = question;
+            gameState.usedQuestions.push(question.kana);
+            if (gameState.usedQuestions.length > 5) gameState.usedQuestions.shift();
+
+            // 更新題目顯示
+            document.getElementById('currentQuestion').textContent = question.kana;
+            document.getElementById('currentHint').textContent = `正確答案：${question.romaji}`;
+
+            // 生成目標
+            const canvas = document.getElementById('gameCanvas');
+            canvas.innerHTML = '';
+
+            const allData = dataSource;
+            let answers = [question.romaji];
+
+            // 加入4個錯誤選項
+            while (answers.length < 5) {
+                const rand = allData[Math.floor(Math.random() * allData.length)].romaji;
+                if (!answers.includes(rand)) answers.push(rand);
+            }
+
+            // 打亂順序
+            answers.sort(() => Math.random() - 0.5);
+
+            answers.forEach(answer => {
+                const target = document.createElement('div');
+                target.className = 'target';
+                target.textContent = answer;
+
+                // 隨機位置
+                const maxX = canvas.offsetWidth - 80;
+                const maxY = canvas.offsetHeight - 80;
+                target.style.left = Math.random() * maxX + 'px';
+                target.style.top = Math.random() * maxY + 'px';
+
+                target.addEventListener('click', (e) => {
+                    if (!gameState.isRunning) return;
+                    e.stopPropagation();
+
+                    target.classList.add('clicked');
+
+                    const isCorrect = answer === question.romaji;
+
+                    if (isCorrect) {
+                        gameState.score += 10;
+                        gameState.hits++;
+                        showFeedback('正確！+10分', 'correct');
+
+                        if (gameState.hits >= gameState.targetHits) {
+                            setTimeout(endGame, 300);
+                            return;
+                        }
+                        setTimeout(generateNewTarget, 450);
+                    } else {
+                        gameState.score = Math.max(0, gameState.score - 5);
+                        showFeedback('錯誤！-5分', 'incorrect');
+                        setTimeout(generateNewTarget, 650);
+                    }
+
+                    updateDisplay();
+                });
+
+                canvas.appendChild(target);
+            });
+        }
+
+        function showFeedback(message, type) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.className = `feedback ${type} show`;
+
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 1600);
+        }
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        // 初始化
+        window.addEventListener('load', () => {
+            updateDisplay();
+        });
+    </script>
+</body>
+</html>
